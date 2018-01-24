@@ -20,6 +20,25 @@ class App extends React.Component {
     }
   }
 
+
+  componentDidMount() {
+    fetch('http://localhost:4567/api/v1/questions')
+      .then(response => {
+        if (response.ok) {
+          return response;
+        } else {
+          let errorMessage = `${response.status} (${response.statusText})`,
+          error = new Error(errorMessage);
+          throw(error);
+        }
+      })
+      .then(response => response.json())
+      .then(body =>{
+        this.setState({ questions: body});
+      })
+      .catch(error => console.error(`Error in fetch: ${error.message}`));
+  }
+
   render() {
     let questions = this.state.questions.map(question => {
       let selected;
